@@ -1,0 +1,14 @@
+{
+  "name": "report-api",
+  "public": true,
+  "ready_url": "https://report-api.helpusersvote.com",
+  "options": {
+    "base": "node:9-onbuild",
+    "port": 4800,
+    "env": {
+      "NODE_ENV": "production",
+      "REDIS_HOST": "huv-redis-master"
+    }
+  }
+}
+  

@@ -1,0 +1,10 @@
+{
+  "name": "election-api",
+  "options": {
+    "base": "node:9-onbuild",
+    "port": 3000,
+    "env": {
+      "NODE_ENV": "production"
+    }
+  }
+}
