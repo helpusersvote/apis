@@ -12,7 +12,7 @@ app.use('/v1', v1)
 app.get('/internal/health', (_, res) => res.json({ hi: '☺' }))
 app.get('/', (_, res) => res.json({ hi: '☺' }))
 
-const port = process.env.PORT || 4800
+const port = process.env.PORT || 3000
 
 app.listen(port, () => {
   console.log(`server.ready: { port: ${port} }`)
