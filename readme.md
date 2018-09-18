@@ -7,8 +7,8 @@
 This is our monorepo of API services for you to use in your application:
 
 - [@helpusersvote/election-api](https://github.com/helpusersvote/apis/tree/master/packages/election-api)
-- [@helpusersvote/go-router](https://github.com/helpusersvote/apis/tree/master/packages/go-router)
-- [@helpusersvote/report-api](https://github.com/helpusersvote/apis/tree/master/packages/report-api)
+- [@helpusersvote/go-helpusersvote](https://github.com/helpusersvote/apis/tree/master/packages/go-helpusersvote)
+- [@helpusersvote/events-api](https://github.com/helpusersvote/apis/tree/master/packages/events-api)
 
 ## Usage
 
