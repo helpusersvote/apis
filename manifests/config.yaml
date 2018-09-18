@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: deploy-config
+data:
+  election-api: |
+    image_repo: helpusersvote/election-api
+    image_tag: latest
+  go-router: |
+    image_repo: helpusersvote/go-router
+    image_tag: latest
+  report-api: |
+    image_repo: helpusersvote/report-api
+    image_tag: latest

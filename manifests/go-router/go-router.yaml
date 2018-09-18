@@ -1,0 +1,35 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  labels:
+    heritage: huv
+    app: ${_name}
+  name: ${_name}
+spec:
+  selector:
+    matchLabels:
+      app: ${_name}
+  template:
+    metadata:
+      labels:
+        app: ${_name}
+      name: ${_name}
+    spec:
+      containers:
+        - name: ${_name}
+          image: ${image_repo}:${image_tag}
+          env:
+            - name: CONFIG_API_HOST
+              value: http://huv-secret-api
+          ports:
+            - name: http
+              containerPort: 3000
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /internal/health
+              port: 3000
+          readinessProbe:
+            httpGet:
+              path: /internal/health
+              port: 3000
