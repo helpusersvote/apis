@@ -6,9 +6,9 @@ data:
   election-api: |
     image_repo: helpusersvote/election-api
     image_tag: latest
-  go-router: |
-    image_repo: helpusersvote/go-router
+  go-helpusersvote: |
+    image_repo: helpusersvote/go-helpusersvote
     image_tag: latest
-  report-api: |
-    image_repo: helpusersvote/report-api
+  events-api: |
+    image_repo: helpusersvote/events-api
     image_tag: latest
