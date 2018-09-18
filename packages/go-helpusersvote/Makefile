@@ -1,3 +1,3 @@
-NAME=go-router
+NAME=go-helpusersvote
 
 include ../../build/Makefile
