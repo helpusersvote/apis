@@ -1,16 +1,20 @@
 {
-  "name": "@helpusersvote/report-api",
+  "name": "@helpusersvote/go-router",
   "scripts": {
     "dev": "nodemon index.js",
     "start": "node index.js",
     "test": "ava"
   },
   "dependencies": {
+    "analytics-event": "^0.2.1",
     "analytics-id": "^0.1.0",
+    "axios": "^0.18.0",
     "body-parser": "^1.18.3",
+    "config-client": "^0.3.1",
     "cors": "^2.8.4",
     "express": "^4.16.3",
     "morgan": "^1.9.0",
-    "redis": "^2.8.0"
+    "pretty-error": "^2.1.1",
+    "tiny-lru": "^1.6.1"
   }
 }

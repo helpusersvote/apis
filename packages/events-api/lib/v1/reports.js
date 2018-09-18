@@ -10,7 +10,7 @@ reports.use(
   '/reports',
   wrap(async (req, res) => {
     if (!readKey || readKey !== req.headers['x-report-read-key']) {
-      return res.json({
+      return res.status(401).json({
         error: {
           code: 'unauthorized',
           message: 'Missing read key to view reports'
@@ -21,23 +21,20 @@ reports.use(
     const reqBody = req.body || {}
     const reqParams = req.query || {}
 
-    const nid = reqBody.nid || reqParams.nid
+    const nid =
+      reqBody.nid || reqParams.nid || reqBody.namespace || reqParams.namespace
     const period = reqBody.period || reqParams.period
-
-    if (req.method !== 'GET') {
-      return res.json({
-        error: {
-          code: 'invalid_method',
-          message: 'This endpoint only responds to GET'
-        }
-      })
-    }
 
     console.log(`v1.report: { nid: ${nid || 'none'} }`)
 
     const stats = await fetchStats({
       nid,
-      events: ['view', 'click', 'conversion'],
+      events: [
+        'view',
+        'click',
+        'voter_registration_checked',
+        'voter_registration_started'
+      ],
       period
     })
 

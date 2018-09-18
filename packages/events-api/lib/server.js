@@ -11,6 +11,7 @@ app.use('/v1', v1)
 
 const homeURL = 'https://helpusersvote.com/dashboard'
 
+app.get('/internal/health', (_, res) => res.send('☺'))
 app.get('/', (_, res) => res.redirect(homeURL))
 
 const port = process.env.PORT || 4800

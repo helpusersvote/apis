@@ -1,3 +1,3 @@
-NAME=report-api
+NAME=events-api
 
 include ../../build/Makefile
