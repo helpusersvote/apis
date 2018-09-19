@@ -12,7 +12,7 @@ locals {
 module "config" {
   source = "git::https://github.com/helpusersvote/terraform-kubernetes-helpusersvote.git//modules/config"
 
-  components   = ["election-api", "go-router", "report-api"]
+  components   = ["election-api", "go-helpusersvote", "events-api"]
   render_dir   = "${local.render_dir}"
   config       = "${local.config_path}"
   manifest_dir = "${local.manifests_dir}"
