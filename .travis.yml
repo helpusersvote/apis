@@ -1,4 +1,12 @@
 language: node_js
+sudo: required
+services:
+- docker
+env:
+  global:
+  - TF_VAR_gcloud_creds=${TRAVIS_BUILD_DIR}/test/usermirror-staging.json
+  - TF_VAR_kubeconfig=test-kubeconfig
+
 cache:
   directories:
     - ~/.npm
@@ -7,7 +15,18 @@ notifications:
 node_js:
   - '10'
 
-script: lerna run test
+before_install:
+- make setup-env
+- openssl aes-256-cbc -K ${encrypted_bd41513aa00e_key} -iv ${encrypted_bd41513aa00e_iv} -in ./test/usermirror-staging.json.encrypted -out ${TF_VAR_gcloud_creds} -d
+
+install:
+- make build
+
+script:
+- make check
+- gcloud auth activate-service-account --key-file=${TF_VAR_gcloud_creds}
+- mkdir ~/.docker && gcloud beta auth configure-docker --quiet
+- make push
 
 branches:
   except:
