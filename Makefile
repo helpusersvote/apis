@@ -18,6 +18,12 @@ push:
 		( cd ./packages/$${i} && make gcr-push ) \
 	done
 
+release:
+	@for i in $(DEPLOYMENTS); do \
+		echo "Pushing $${i}..."; \
+		( cd ./packages/$${i} && make release) \
+	done
+
 deploy:
 	cd terraform && terraform apply -auto-approve
 
@@ -41,4 +47,4 @@ bin/terraform: bin
 bin:
 	mkdir -p $@
 
-.PHONY: build push deploy destroy check setup-env
+.PHONY: build push release deploy destroy check setup-env

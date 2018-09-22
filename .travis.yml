@@ -26,7 +26,12 @@ script:
 - make check
 - gcloud auth activate-service-account --key-file=${TF_VAR_gcloud_creds}
 - mkdir ~/.docker && gcloud beta auth configure-docker --quiet
-- make push
+- |
+    if [ ! -z ${TRAVIS_TAG} ]; then
+        TAG=${TRAVIS_TAG} make release
+    else
+        make push
+    fi
 
 branches:
   except:

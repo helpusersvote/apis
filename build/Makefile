@@ -10,6 +10,11 @@ DOCKERHUB_IMAGE=$(DOCKERHUB_ORG)/$(NAME)
 build:
 	@make docker-build docker-push
 
+release:
+	@make docker-build
+	@docker tag $(GCR_REPO):$(HASH) $(GCR_REPO):$(TAG)
+	@docker push $(GCR_REPO):$(TAG)
+
 docker-build:
 	@echo "Building... ($(HASH))"
 	@docker build -t $(DOCKERHUB_IMAGE):$(HASH) -t $(GCR_REPO):$(HASH) -t $(DOCKERHUB_IMAGE):latest  .
