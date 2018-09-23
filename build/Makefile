@@ -1,6 +1,6 @@
 GOCMD=go
 GET_HASH=git rev-parse HEAD
-HASH ?= $(GET_HASH)
+HASH:=$(shell $(GET_HASH))
 REPO ?= helpusersvote
 IMAGE ?= $(REPO)/$(NAME)
 
