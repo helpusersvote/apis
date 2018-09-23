@@ -22,6 +22,7 @@ function generateEventAggregates(event) {
   const eventName = event.name || 'View'
 
   let region = get(event, 'props.region')
+  let campaignId = get(event, 'props.campaign')
 
   const logEvent = {
     nsc_id: namespaceId,
@@ -35,10 +36,16 @@ function generateEventAggregates(event) {
     logEvent.region = region
   }
 
+  if (campaignId) {
+    campaignId = campaignId.toLowerCase()
+    logEvent.campaign = campaignId
+  }
+
   // console.log('v1.events.track:', logEvent)
 
   const eventKeys = getEventKeys({
     namespaceId,
+    campaignId,
     timestamp,
     event: eventName,
     periods: ['hour', 'minute'],
@@ -51,6 +58,7 @@ function generateEventAggregates(event) {
 // Generate multiple keys for KV-store to update aggregates
 function getEventKeys({
   namespaceId,
+  campaignId,
   messageId,
   event,
   region,
@@ -67,7 +75,7 @@ function getEventKeys({
       keys.push(
         getEventKey({
           namespaceId,
-          messageId,
+          campaignId,
           event,
           timestamp,
           periodType
@@ -78,6 +86,7 @@ function getEventKeys({
     keys.push(
       getEventKey({
         namespaceId,
+        campaignId,
         event,
         region,
         timestamp,
@@ -89,6 +98,7 @@ function getEventKeys({
   keys.push(
     getEventKey({
       namespaceId,
+      campaignId,
       event
     })
   )
@@ -99,6 +109,7 @@ function getEventKeys({
 // Generate key for KV-store to update aggregates
 function getEventKey({
   namespaceId,
+  campaignId,
   event,
   region,
   timestamp,
@@ -134,7 +145,7 @@ function getEventKey({
     // silence error, if invalid date
   }
 
-  return [namespaceId, event, region, periodType, timeKey]
+  return [namespaceId, campaignId, event, region, periodType, timeKey]
     .filter(Boolean)
     .join(':')
 }
