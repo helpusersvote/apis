@@ -9,13 +9,13 @@ export PATH := $(dir $(realpath $(firstword $(MAKEFILE_LIST))))/bin:$(PATH)
 build:
 	@for i in $(DEPLOYMENTS); do \
 		echo "Building $${i}..."; \
-		( cd ./packages/$${i} && make build-image ) \
+		( cd ./packages/$${i} && NAME=$${i} make -f ../../build/Makefile build-image ) \
 	done
 
 push:
 	@for i in $(DEPLOYMENTS); do \
 		echo "Pushing $${i}..."; \
-		( cd ./packages/$${i} && make push-image ) \
+		( cd ./packages/$${i} && NAME=$${i} make -f ../../build/Makefile push-image ) \
 	done
 
 release:
