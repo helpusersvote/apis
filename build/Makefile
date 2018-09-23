@@ -1,32 +1,26 @@
-DEPLOYMENT=deployment/$(NAME)
 GOCMD=go
 GET_HASH=git rev-parse HEAD
 HASH:=$(shell $(GET_HASH))
-GCP_PROJECT=usermirror-staging
-GCR_REPO=us.gcr.io/$(GCP_PROJECT)/$(NAME)
-DOCKERHUB_ORG=helpusersvote
-DOCKERHUB_IMAGE=$(DOCKERHUB_ORG)/$(NAME)
+REPO ?= helpusersvote
+IMAGE ?= $(REPO)/$(NAME)
 
 build:
-	@make docker-build docker-push
+	@make build-image push-image
 
 release:
-	@make docker-build
-	@docker tag $(GCR_REPO):$(HASH) $(GCR_REPO):$(TAG)
-	@docker push $(GCR_REPO):$(TAG)
+	@make build-image
+	@docker tag $(IMAGE):$(HASH) $(IMAGE):$(TAG)
+	@docker push $(IMAGE):$(TAG)
 
-docker-build:
-	@echo "Building... ($(HASH))"
-	@docker build -t $(DOCKERHUB_IMAGE):$(HASH) -t $(GCR_REPO):$(HASH) -t $(DOCKERHUB_IMAGE):latest  .
-	@echo "Built complete ($(HASH))"
+build-image:
+	@echo "Building as $(IMAGE):$(HASH)"
+	@docker build -t $(IMAGE):$(HASH) -t $(IMAGE):latest  .
 
-docker-push:
-	@echo "🛫 Docker Hub · $(HASH)"
-	@docker push $(DOCKERHUB_IMAGE):$(HASH)
-	@docker push $(DOCKERHUB_IMAGE):latest
-	@echo "🛬 Docker Hub · $(DOCKERHUB_IMAGE):$(HASH)"
+push-image:
+	@echo "Pushing as $(IMAGE):$(HASH)"
+	@docker push $(IMAGE):$(HASH)
+	@docker push $(IMAGE):latest
 
-gcr-push:
-	@echo "🛫 GCR · $(HASH)"
-	@gcloud docker -- push $(GCR_REPO) > /dev/null
-	@echo "🛬 GCR · $(GCR_REPO):$(HASH)"
+run-image: build-image
+	@echo "Running... ($(HASH))"
+	docker run -it -v `pwd`/tmp:/usr/src/tmp $(IMAGE):$(HASH)

@@ -8,5 +8,5 @@ FROM mhart/alpine-node:base-10
 WORKDIR /usr/src
 ENV NODE_ENV="production"
 COPY --from=base /usr/src .
-EXPOSE 4800
+EXPOSE 3000
 CMD ["node", "index.js"]

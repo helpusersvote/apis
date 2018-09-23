@@ -14,7 +14,7 @@ const homeURL = 'https://helpusersvote.com/dashboard'
 app.get('/internal/health', (_, res) => res.send('☺'))
 app.get('/', (_, res) => res.redirect(homeURL))
 
-const port = process.env.PORT || 4800
+const port = process.env.PORT || 3000
 
 app.listen(port, () => {
   console.log(`server.ready: { port: ${port} }`)
