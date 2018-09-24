@@ -6,7 +6,7 @@
     "test": "ava"
   },
   "dependencies": {
-    "@usermirror/log": "^0.1.10",
+    "@usermirror/log": "^0.1.11",
     "@usermirror/metrics": "^0.1.10",
     "analytics-event": "^0.2.1",
     "analytics-id": "^0.1.0",
