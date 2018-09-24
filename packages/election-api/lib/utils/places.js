@@ -1,5 +1,6 @@
 const { getExamplePlace } = require('./place-backends/example')
 const { useBackend } = require('./place-backends')
+const { info } = require('@usermirror/log')
 const { track } = require('./analytics')
 const { parse } = require('./address')
 
@@ -36,7 +37,7 @@ function normalizePlace({ address, place }) {
 async function findPollingPlace({ address, backend: backendType }) {
   const backend = useBackend(backendType)
 
-  console.log('election-api.places.find:', { backend: backendType })
+  info('election-api.places.find:', { backend: backendType })
 
   track({
     name: 'Polling Place Searched',

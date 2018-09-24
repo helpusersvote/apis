@@ -33,7 +33,3 @@ script:
     else
         make push
     fi
-
-branches:
-  except:
-    - /^v\d+\.\d+\.\d+$/

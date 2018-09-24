@@ -3,6 +3,7 @@ kind: Service
 metadata:
   labels:
     app: ${_name}
+    um-component: ${_name}
   name: ${_name}
 spec:
   type: LoadBalancer

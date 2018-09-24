@@ -1,3 +1,4 @@
+const { info, error } = require('@usermirror/log')
 const { post } = require('axios')
 const Event = require('analytics-event').withOptions({
   format: 'short'
@@ -12,7 +13,7 @@ function track(event) {
   queue.push(Event(event))
 }
 
-// Send events in batch every 200ms
+// Send events in batch every 500ms
 setInterval(() => {
   // Get batch of 100 events
   const events = queue.splice(0, 100)
@@ -22,14 +23,14 @@ setInterval(() => {
   }
 
   if (queue.length > 0) {
-    console.log('analytics.queue.overflow: ' + queue.length)
+    info('analytics.queue.overflow', { count: queue.length })
   }
 
-  console.log(`analytics.queue.flush: ${events.length} events`)
+  info('analytics.queue.flush', { count: events.length })
 
   post(EVENTS_API_HOST + '/v1/track', {
     events
-  }).catch(() => {
-    console.error('analytics.queue.flush.error: events-api unavailable')
+  }).catch(err => {
+    error(`analytics.queue.flush.error: ${err.message}`)
   })
-}, 200)
+}, 500)

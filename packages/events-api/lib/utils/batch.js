@@ -6,10 +6,6 @@ module.exports = {
 }
 
 async function processEventBatch(batch, metadata) {
-  // TODO: use metadata for determining write access pattern
-  console.log('\nprocessing batch of messages:')
-  console.log(batch)
-  console.log('\n')
   return await Promise.all(
     flatten(batch.map(event => generateEventAggregates(event)))
   )
@@ -40,8 +36,6 @@ function generateEventAggregates(event) {
     campaignId = campaignId.toLowerCase()
     logEvent.campaign = campaignId
   }
-
-  // console.log('v1.events.track:', logEvent)
 
   const eventKeys = getEventKeys({
     namespaceId,
@@ -81,6 +75,15 @@ function getEventKeys({
           periodType
         })
       )
+
+      keys.push(
+        getEventKey({
+          namespaceId,
+          event,
+          timestamp,
+          periodType
+        })
+      )
     }
 
     keys.push(
@@ -93,7 +96,24 @@ function getEventKeys({
         periodType
       })
     )
+
+    keys.push(
+      getEventKey({
+        namespaceId,
+        event,
+        region,
+        timestamp,
+        periodType
+      })
+    )
   })
+
+  keys.push(
+    getEventKey({
+      namespaceId,
+      event
+    })
+  )
 
   keys.push(
     getEventKey({
@@ -145,7 +165,19 @@ function getEventKey({
     // silence error, if invalid date
   }
 
-  return [namespaceId, campaignId, event, region, periodType, timeKey]
-    .filter(Boolean)
-    .join(':')
+  let eventKey = [namespaceId, campaignId].filter(Boolean).join(':')
+
+  if (event) {
+    eventKey += `::event:${event}`
+  }
+
+  if (region) {
+    eventKey += `::region:${region}`
+  }
+
+  if (periodType && timeKey) {
+    eventKey += `::${periodType}:${timeKey}`
+  }
+
+  return eventKey
 }

@@ -1,56 +1,77 @@
 const express = require('express')
 const tinylru = require('tiny-lru')
-const PrettyError = require('pretty-error')
+const { info, error } = require('@usermirror/log')
+const { help, incr, Gauge } = require('@usermirror/metrics')
 const { track } = require('../utils/analytics')
 const { wrap } = require('../utils/async')
 const config = require('../utils/config')
 
 // https://go.helpusersvote.com/v1/example.com/home-page
 
+const MAX_ITEMS = 1000
 const router = express.Router()
 const LRU = tinylru(
   // max items
-  1000,
+  MAX_ITEMS,
   // notify
   false,
   // ttl = 2 minutes
   1000 * 60 * 60
 )
 
-const pe = new PrettyError()
-const partnerId = process.env.VDO_PARTNER_ID || ''
+const partnerId = process.env.VDO_PARTNER_ID || '899439'
+const lruGauge = new Gauge({
+  name: 'go_helpusersvote_lru_size',
+  help: 'Number of elements in last recently used cache'
+})
+
+help('redirect_fail', 'Number of failed redirects')
+help('redirect_success', 'Number of successful redirects')
+help('redirect_success_href', 'Number of successful redirects per url')
+help('redirect_success_generated', 'Number of generated redirects')
 
 async function getCtaHref(namespaceId, configId) {
   const key = [namespaceId, configId].join(':')
   const cachedValue = LRU.get(key)
   const campaignQuery = Buffer.from(key).toString('base64')
+  const defaultHref = `https://verify.vote.org/?partner=${partnerId}&campaign=${campaignQuery}`
+
+  lruGauge.set(LRU.length)
 
   if (cachedValue) {
-    console.log('config.cache.hit:', key)
+    info('config.cache.hit:', { key })
 
     return cachedValue
   }
 
-  console.log('config.cache.miss:', key)
+  info('config.cache.miss', { key })
 
   try {
     const { ctaHref } = await config.get({ namespaceId, configId })
 
     if (!ctaHref) {
-      console.log('config.get.not_found:', key)
-      const defaultURL = `https://verify.vote.org/?partner=${partnerId}&campaign=${campaignQuery}`
-      setTimeout(() => LRU.set(key, defaultURL), 0)
+      info('config.get.not_found', { key })
+      incr('redirect_success_generated')
+      setTimeout(() => LRU.set(key, defaultHref), 0)
 
-      return defaultURL
+      return {
+        ok: true,
+        href: defaultHref
+      }
     }
 
     setTimeout(() => LRU.set(key, ctaHref), 0)
 
-    return ctaHref
+    return {
+      ok: true,
+      href: ctaHref
+    }
   } catch (err) {
-    console.log('config.get.error:\n')
-    console.log(pe.render(err))
-    return `https://verify.vote.org/?partner=${partnerId}&campaign=${campaignQuery}`
+    error(`config.get.error: ${err.message}`)
+    return {
+      ok: false,
+      href: defaultHref
+    }
   }
 }
 
@@ -58,7 +79,7 @@ async function redirect(req, res) {
   const { params, query } = req
   const { namespace, campaign } = params
   const region = query.region || query.r
-  const href = await getCtaHref(namespace, campaign)
+  const { ok, href } = await getCtaHref(namespace, campaign)
 
   const props = {
     campaign
@@ -68,6 +89,16 @@ async function redirect(req, res) {
   if (region) {
     props.region = region
   }
+
+  if (ok) {
+    incr('redirect_success', { namespace })
+    incr('redirect_success_href', { href })
+  } else {
+    incr('redirect_fail', { namespace })
+    incr('redirect_fail_href', { href })
+  }
+
+  info('redirect.routed', { namespace, campaign, href })
 
   track({
     namespace,

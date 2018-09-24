@@ -6,6 +6,8 @@
     "test": "ava"
   },
   "dependencies": {
+    "@usermirror/log": "^0.1.8",
+    "@usermirror/metrics": "^0.1.4",
     "analytics-event": "^0.2.1",
     "analytics-id": "^0.1.0",
     "body-parser": "^1.18.3",
@@ -15,6 +17,7 @@
     "lodash.snakecase": "^4.1.1",
     "morgan": "^1.9.0",
     "pretty-error": "^2.1.1",
-    "redis": "^2.8.0"
+    "redis": "^2.8.0",
+    "winston": "^3.1.0"
   }
 }
