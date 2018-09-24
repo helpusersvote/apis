@@ -1,6 +1,7 @@
-const { Router } = require('express')
-const { wrap } = require('../utils/async')
+const { info, error } = require('@usermirror/log')
 const { fetchStats } = require('../utils/stats')
+const { wrap } = require('../utils/async')
+const { Router } = require('express')
 
 // Create `/reports` endpoints router
 const reports = Router()
@@ -25,7 +26,7 @@ reports.use(
       reqBody.nid || reqParams.nid || reqBody.namespace || reqParams.namespace
     const period = reqBody.period || reqParams.period
 
-    console.log(`v1.report: { nid: ${nid || 'none'} }`)
+    info('v1.report', { nid })
 
     const stats = await fetchStats({
       nid,

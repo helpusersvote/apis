@@ -1,6 +1,7 @@
-const { get } = require('axios')
-const { stringify } = require('../address')
 const { getExamplePlace } = require('./example')
+const { info, error } = require('@usermirror/log')
+const { stringify } = require('../address')
+const { get } = require('axios')
 
 const endpoint = 'http://onprem-geo-db/v1/polling-places/find'
 
@@ -14,16 +15,16 @@ async function fetchPollingPlace({ address }) {
     const { pollingLocations } = await get(endpoint + qs).then(r => r.data)
 
     if (!pollingLocations) {
-      console.log('election-api.onprem.error: missing pollingLocations')
+      error('election-api.onprem.error: missing pollingLocations')
       return getExamplePlace({ id: '6dc88eace07c', address })
     }
 
     if (pollingLocations.length === 0) {
-      console.log('election-api.onprem.error: no pollingLocations found')
+      error('election-api.onprem.error: no pollingLocations found')
       return getExamplePlace({ id: '6dc88eace07c', address })
     }
 
-    console.log('election-api.onprem.success: found polling place')
+    info('election-api.onprem.success: found polling place')
 
     return pollingLocations[0]
   } catch (err) {

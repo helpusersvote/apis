@@ -37,8 +37,6 @@ function generateEventAggregates(event) {
     logEvent.campaign = campaignId
   }
 
-  // console.log('v1.events.track:', logEvent)
-
   const eventKeys = getEventKeys({
     namespaceId,
     campaignId,

@@ -1,4 +1,6 @@
 const { getAddress, findPollingPlace } = require('../utils/places')
+const { help, incr } = require('@usermirror/metrics')
+const { info, error } = require('@usermirror/log')
 const { Router } = require('express')
 const { wrap } = require('../utils/async')
 
@@ -14,18 +16,44 @@ function getPlaceBackend() {
   }
 }
 
+help('polling_place_lookup', 'Number of polling place lookup attempts')
+help(
+  'polling_place_lookup_success',
+  'Number of successful polling place lookup attempts'
+)
+help(
+  'polling_place_lookup_fail',
+  'Number of failed polling place lookup attempts'
+)
+
 function servePollingPlace(lookupKey) {
   return wrap(async (req, res) => {
     const lookupValue = req[lookupKey]
     const homeAddress = getAddress({ [lookupKey]: lookupValue })
-    const place = await findPollingPlace({
-      address: homeAddress,
-      backend: getPlaceBackend()
-    })
 
-    return res.json({
-      place
-    })
+    incr('polling_place_lookup')
+
+    try {
+      const place = await findPollingPlace({
+        address: homeAddress,
+        backend: getPlaceBackend()
+      })
+
+      incr('polling_place_lookup_success')
+
+      return res.json({
+        place
+      })
+    } catch (err) {
+      incr('polling_place_lookup_fail')
+      error('polling place lookup failed', { error: err.message })
+      return res.json({
+        error: {
+          code: 'failed',
+          message: 'Please confirm this address is correct'
+        }
+      })
+    }
   })
 }
 

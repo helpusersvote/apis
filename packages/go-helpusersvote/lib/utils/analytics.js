@@ -13,7 +13,7 @@ function track(event) {
   queue.push(Event(event))
 }
 
-// Send events in batch every 200ms
+// Send events in batch every 500ms
 setInterval(() => {
   // Get batch of 100 events
   const events = queue.splice(0, 100)
@@ -33,4 +33,4 @@ setInterval(() => {
   }).catch(err => {
     error(`analytics.queue.flush.error: ${err.message}`)
   })
-}, 200)
+}, 500)
