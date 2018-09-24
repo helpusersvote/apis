@@ -21,7 +21,7 @@ push:
 release:
 	@for i in $(DEPLOYMENTS); do \
 		echo "Pushing $${i}..."; \
-		( cd ./packages/$${i} && make release) \
+		( cd ./packages/$${i} && NAME=$${i} make -f ../../build/Makefile release) \
 	done
 
 deploy:
