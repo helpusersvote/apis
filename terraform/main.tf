@@ -10,7 +10,7 @@ locals {
 }
 
 module "config" {
-  source = "git::https://github.com/helpusersvote/terraform-kubernetes-helpusersvote.git//modules/config?ref=v0.0.3"
+  source = "git::https://github.com/helpusersvote/terraform-kubernetes-helpusersvote.git//modules/config?ref=b2ee50176138a2900784694190b3d9f445028b67"
 
   components   = ["election-api", "go-helpusersvote", "events-api"]
   render_dir   = "${local.render_dir}"
@@ -23,7 +23,7 @@ module "config" {
 }
 
 module "kubernetes" {
-  source = "git::https://github.com/helpusersvote/terraform-kubernetes-helpusersvote.git//modules/kubernetes?ref=v0.0.3"
+  source = "git::https://github.com/helpusersvote/terraform-kubernetes-helpusersvote.git//modules/kubernetes?ref=b2ee50176138a2900784694190b3d9f445028b67"
 
   manifest_dirs = "${module.config.dirs}"
   kubeconfig    = "${var.kubeconfig}"
