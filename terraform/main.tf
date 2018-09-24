@@ -16,6 +16,10 @@ module "config" {
   render_dir   = "${local.render_dir}"
   config       = "${local.config_path}"
   manifest_dir = "${local.manifests_dir}"
+
+  vars = {
+    domain = "${var.domain}"
+  }
 }
 
 module "kubernetes" {

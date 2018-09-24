@@ -21,6 +21,12 @@ variable "kubeconfig" {
   type        = "string"
 }
 
+variable "domain" {
+  description = "Domain which is used in configuring ingresses"
+  type        = "string"
+  default     = "staging.helpusersvote.com"
+}
+
 variable "last_resource" {
   description = "Allows dependency to be expressed to module"
   type        = "string"
