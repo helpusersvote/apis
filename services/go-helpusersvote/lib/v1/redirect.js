@@ -25,6 +25,8 @@ const lruGauge = new Gauge({
   help: 'Number of elements in last recently used cache'
 })
 
+help('redirect_cache_hit', 'Number of cached redirects')
+help('redirect_cache_miss', 'Number of uncached redirects')
 help('redirect_fail', 'Number of failed redirects')
 help('redirect_success', 'Number of successful redirects')
 help('redirect_success_href', 'Number of successful redirects per url')
@@ -39,19 +41,33 @@ async function getCtaHref(namespaceId, configId) {
   lruGauge.set(LRU.length)
 
   if (cachedValue) {
-    info('config.cache.hit:', { key })
+    info('config.cache.hit:', { key, value: cachedValue })
+    incr('redirect_cache_hit', {
+      namespace: namespaceId,
+      campaign: configId
+    })
 
-    return cachedValue
+    return {
+      ok: true,
+      href: cachedValue
+    }
   }
 
   info('config.cache.miss', { key })
+  incr('redirect_cache_miss', {
+    namespace: namespaceId,
+    campaign: configId
+  })
 
   try {
     const { ctaHref } = await config.get({ namespaceId, configId })
 
     if (!ctaHref) {
       info('config.get.not_found', { key })
-      incr('redirect_success_generated')
+      incr('redirect_success_generated', {
+        namespace: namespaceId,
+        href: defaultHref
+      })
       setTimeout(() => LRU.set(key, defaultHref), 0)
 
       return {

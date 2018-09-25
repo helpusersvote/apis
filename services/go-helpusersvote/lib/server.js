@@ -39,10 +39,6 @@ app.get('/:namespace', (req, res, next) => {
   return v1.redirect(req, res, next)
 })
 
-app.get('/:namespace/:campaign', (req, res, next) =>
-  v1.redirect(req, res, next)
-)
-
 const port = process.env.PORT || 3000
 
 app.listen(port, () => info('server.ready', { port }))
