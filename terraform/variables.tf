@@ -27,6 +27,11 @@ variable "domain" {
   default     = "staging.helpusersvote.com"
 }
 
+variable "google_api_key" {
+  description = "Google API Key to use the Civic Information API"
+  type        = "string"
+}
+
 variable "last_resource" {
   description = "Allows dependency to be expressed to module"
   type        = "string"
