@@ -19,6 +19,7 @@ module "config" {
 
   vars = {
     domain         = "${var.domain}"
+    api_read_key   = "${var.events_api_read_key}"
     google_api_key = "${var.google_api_key}"
   }
 }
