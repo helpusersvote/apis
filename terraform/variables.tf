@@ -30,6 +30,7 @@ variable "domain" {
 variable "google_api_key" {
   description = "Google API Key to use the Civic Information API"
   type        = "string"
+  default     = ""
 }
 
 variable "last_resource" {
