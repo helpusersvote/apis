@@ -17,6 +17,7 @@ function generateEventAggregates(event) {
   const timestamp = event.ts
   const eventName = event.name || 'View'
 
+  let age = get(event, 'props.age')
   let region = get(event, 'props.region')
   let campaignId = get(event, 'props.campaign')
 
@@ -43,7 +44,8 @@ function generateEventAggregates(event) {
     timestamp,
     event: eventName,
     periods: ['hour', 'minute'],
-    region
+    region,
+    age
   })
 
   return eventKeys.map(eventKey => incr(eventKey, messageId))
@@ -54,6 +56,7 @@ function getEventKeys({
   namespaceId,
   campaignId,
   messageId,
+  age,
   event,
   region,
   timestamp,
@@ -64,7 +67,33 @@ function getEventKeys({
   event = snakeCase(event)
 
   periods.forEach(periodType => {
+    if (age) {
+      keys.push(
+        getEventKey({
+          namespaceId,
+          campaignId,
+          age,
+          event,
+          timestamp,
+          periodType
+        })
+      )
+    }
+
     if (region) {
+      if (age) {
+        keys.push(
+          getEventKey({
+            namespaceId,
+            campaignId,
+            age,
+            event,
+            region,
+            timestamp,
+            periodType
+          })
+        )
+      }
       // add non-region event key
       keys.push(
         getEventKey({
