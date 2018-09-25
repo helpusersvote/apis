@@ -5,13 +5,13 @@ async function fetchStats({ nid, events, period }) {
   const stats = {}
   const keysPerEvent = await Promise.all(
     events.map(async event => {
-      const eventPrefix = `${nid}:${event}:*`
+      const eventPrefix = `${nid}::event:${event}::${period}:*`
       const [cursor, keys] = await scan(
         0, // start at beginning
         'match',
         eventPrefix,
         'count',
-        100 // get the first 100 keys
+        1000 // get the first 1000 keys
       )
 
       return { cursor, event, keys }
@@ -72,7 +72,7 @@ function eventCountFactory({ nid, event, period, validTimestamps }) {
 
     if (valid) {
       value = parseInt(
-        (await get(`${nid}:${event}:${period}:${timestamp}`)) || 0,
+        (await get(`${nid}::event:${event}::${period}:${timestamp}`)) || 0,
         10
       )
     }

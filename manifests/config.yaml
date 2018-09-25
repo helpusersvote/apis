@@ -5,10 +5,10 @@ metadata:
 data:
   election-api: |
     image_repo: helpusersvote/election-api
-    image_tag: de317ef949b35538d194fe462141bf3893af07f2
+    image_tag: 917df2417de5cbf309219f39f24dc742b1f507b9
   go-helpusersvote: |
     image_repo: helpusersvote/go-helpusersvote
-    image_tag: de317ef949b35538d194fe462141bf3893af07f2
+    image_tag: 917df2417de5cbf309219f39f24dc742b1f507b9
   events-api: |
     image_repo: helpusersvote/events-api
-    image_tag: de317ef949b35538d194fe462141bf3893af07f2
+    image_tag: 917df2417de5cbf309219f39f24dc742b1f507b9
