@@ -33,6 +33,12 @@ variable "google_api_key" {
   default     = ""
 }
 
+variable "events_api_read_key" {
+  description = "Events API read key for the Dashboard"
+  type        = "string"
+  default     = ""
+}
+
 variable "last_resource" {
   description = "Allows dependency to be expressed to module"
   type        = "string"

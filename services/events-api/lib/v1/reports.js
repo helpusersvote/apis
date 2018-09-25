@@ -5,12 +5,12 @@ const { Router } = require('express')
 
 // Create `/reports` endpoints router
 const reports = Router()
-const readKey = process.env.REPORT_API_READ_KEY
+const readKey = process.env.API_READ_KEY
 
 reports.use(
   '/reports',
   wrap(async (req, res) => {
-    if (!readKey || readKey !== req.headers['x-report-read-key']) {
+    if (!readKey || readKey !== req.headers['x-api-read-key']) {
       return res.status(401).json({
         error: {
           code: 'unauthorized',
