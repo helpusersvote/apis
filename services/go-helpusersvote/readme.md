@@ -1,8 +1,8 @@
 <h1>
-  Events API <a href="https://travis-ci.org/helpusersvote/apis"><img src="https://travis-ci.org/helpusersvote/apis.svg?branch=master" /></a>
+  Go Help Users Vote <a href="https://travis-ci.org/helpusersvote/apis"><img src="https://travis-ci.org/helpusersvote/apis.svg?branch=master" /></a>
 </h1>
 
-[Events API](https://helpusersvote.com/docs/api) is a service for aggregating events like `Voter Registration Started` or `Polling Place Found` to measure efficacy.
+[Go Help Users Vote](https://go.helpusersvote.com) is a configurable URL forwarder for companies to route their users to register and get out to vote.
 
 ## Usage
 
@@ -11,7 +11,7 @@ If you want to run this API locally:
 ```
 git clone https://github.com/helpusersvote/apis.git
 # Open this directory
-cd apis/packages/events-api
+cd apis/services/go-helpusersvote
 npm install
 npm start
 ```

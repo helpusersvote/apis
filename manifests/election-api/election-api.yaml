@@ -18,6 +18,9 @@ spec:
       containers:
         - name: ${_name}
           image: ${image_repo}:${image_tag}
+          env:
+            - name: GOOGLE_API_KEY
+              value: ${google_api_key}
           ports:
             - name: http
               containerPort: 3000

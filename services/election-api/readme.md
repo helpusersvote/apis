@@ -11,7 +11,7 @@ If you want to run this API locally:
 ```
 git clone https://github.com/helpusersvote/apis.git
 # Open this directory
-cd apis/packages/election-api
+cd apis/services/election-api
 npm install
 npm start
 ```

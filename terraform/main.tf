@@ -18,7 +18,8 @@ module "config" {
   manifest_dir = "${local.manifests_dir}"
 
   vars = {
-    domain = "${var.domain}"
+    domain         = "${var.domain}"
+    google_api_key = "${var.google_api_key}"
   }
 }
 
