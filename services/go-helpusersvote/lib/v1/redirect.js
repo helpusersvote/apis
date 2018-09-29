@@ -101,7 +101,6 @@ async function redirect(req, res) {
     campaign
   }
 
-  // TODO: Detect State from GeoIP based on Cloudflare
   if (region) {
     props.region = region
   }
@@ -118,7 +117,7 @@ async function redirect(req, res) {
 
   track({
     namespace,
-    name: 'Click',
+    name: 'CTA Clicked',
     props
   })
 
