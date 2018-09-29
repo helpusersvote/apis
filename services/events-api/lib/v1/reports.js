@@ -1,5 +1,5 @@
+const { fetchStats, fetchRealtimeStats } = require('../utils/stats')
 const { info, error } = require('@usermirror/log')
-const { fetchStats } = require('../utils/stats')
 const { wrap } = require('../utils/async')
 const { Router } = require('express')
 
@@ -7,36 +7,73 @@ const { Router } = require('express')
 const reports = Router()
 const readKey = process.env.API_READ_KEY
 
-reports.use(
+reports.get(
   '/reports',
   wrap(async (req, res) => {
-    if (!readKey || readKey !== req.headers['x-api-read-key']) {
+    const reqParams = req.query || {}
+    const namespace = reqParams.nid || reqParams.namespace
+    const token = req.headers['x-api-read-key']
+
+    if (!readKey || readKey !== token) {
+      error('invalid auth token', { namespace, token })
       return res.status(401).json({
         error: {
           code: 'unauthorized',
-          message: 'Missing read key to view reports'
+          message: 'invalid read key to view reports'
         }
       })
     }
 
-    const reqBody = req.body || {}
-    const reqParams = req.query || {}
+    const { period = 'hour' } = reqParams
 
-    const nid =
-      reqBody.nid || reqParams.nid || reqBody.namespace || reqParams.namespace
-    const period = reqBody.period || reqParams.period
-
-    info('v1.report', { nid })
+    info('v1.report.general', { namespace, period })
 
     const stats = await fetchStats({
-      nid,
+      period,
+      namespace,
       events: [
-        'view',
-        'click',
+        'cta_viewed',
+        'cta_clicked',
         'voter_registration_checked',
         'voter_registration_started'
-      ],
-      period
+      ]
+    })
+
+    res.json({ stats })
+  })
+)
+
+reports.get(
+  '/reports/realtime',
+  wrap(async (req, res) => {
+    const reqParams = req.query || {}
+    const namespace = reqParams.nid || reqParams.namespace
+    const token = req.headers['x-api-read-key']
+
+    if (!readKey || readKey !== token) {
+      error('invalid auth token', { namespace, token })
+      return res.status(401).json({
+        error: {
+          code: 'unauthorized',
+          message: 'invalid read key to view reports'
+        }
+      })
+    }
+
+    const { period = 'hour' } = reqParams
+
+    info('v1.report.realtime', { namespace, period })
+
+    const type = 'realtime'
+    const stats = await fetchStats({
+      type,
+      namespace,
+      events: [
+        'cta_viewed',
+        'cta_clicked',
+        'voter_registration_checked',
+        'voter_registration_started'
+      ]
     })
 
     res.json({ stats })

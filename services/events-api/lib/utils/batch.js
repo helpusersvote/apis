@@ -15,7 +15,7 @@ function generateEventAggregates(event) {
   const namespaceId = event.nsc_id || 'demo'
   const messageId = event.msg_id
   const timestamp = event.ts
-  const eventName = event.name || 'View'
+  const eventName = event.name || 'CTA Viewed'
 
   let age = get(event, 'props.age')
   let region = get(event, 'props.region')
@@ -53,13 +53,12 @@ function generateEventAggregates(event) {
 
 // Generate multiple keys for KV-store to update aggregates
 function getEventKeys({
-  namespaceId,
-  campaignId,
-  messageId,
   age,
   event,
   region,
   timestamp,
+  campaignId,
+  namespaceId,
   periods = ['hour']
 }) {
   const keys = []
@@ -196,12 +195,12 @@ function getEventKey({
 
   let eventKey = [namespaceId, campaignId].filter(Boolean).join(':')
 
-  if (event) {
-    eventKey += `::event:${event}`
-  }
-
   if (region) {
     eventKey += `::region:${region}`
+  }
+
+  if (event) {
+    eventKey += `::event:${event}`
   }
 
   if (periodType && timeKey) {
