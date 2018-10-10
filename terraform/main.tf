@@ -18,7 +18,9 @@ module "config" {
   manifest_dir = "${local.manifests_dir}"
 
   vars = {
-    domain         = "${var.domain}"
+    domain     = "${var.domain}"
+    tls_secret = "${var.tls_secret}"
+
     api_read_key   = "${var.events_api_read_key}"
     google_api_key = "${var.google_api_key}"
   }

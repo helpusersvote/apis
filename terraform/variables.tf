@@ -27,6 +27,12 @@ variable "domain" {
   default     = "staging.helpusersvote.com"
 }
 
+variable "tls_secret" {
+  description = "Name of Secret containing TLS credentials used in configuring ingresses"
+  type        = "string"
+  default     = "ingress-tls"
+}
+
 variable "google_api_key" {
   description = "Google API Key to use the Civic Information API"
   type        = "string"
