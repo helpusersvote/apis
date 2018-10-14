@@ -4,7 +4,7 @@ metadata:
   name: ${_name}
 spec:
   virtualhost:
-    fqdn: ${_name}${domain}
+    fqdn: go.${domain}
     tls:
       secretName: ${tls_secret}
   routes:
