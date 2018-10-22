@@ -27,6 +27,12 @@ variable "domain" {
   default     = "staging.helpusersvote.com"
 }
 
+variable "environment" {
+  description = "String used to uniquely identify an environment"
+  type        = "string"
+  default     = ""
+}
+
 variable "tls_secret" {
   description = "Name of Secret containing TLS credentials used in configuring ingresses"
   type        = "string"

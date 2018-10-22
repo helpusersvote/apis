@@ -21,6 +21,8 @@ spec:
           env:
             - name: API_READ_KEY
               value: ${api_read_key}
+            - name: CLUSTER_ENV
+              value: ${environment}
           ports:
             - name: http
               containerPort: 3000
