@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: ${_name}
-          image: ${image_repo}:${image_tag}
+          image: ${image_digest}
           env:
             - name: GOOGLE_API_KEY
               value: ${google_api_key}

@@ -5,10 +5,7 @@ metadata:
 data:
   election-api: |
     image_repo: helpusersvote/election-api
-    image_tag: f0f577dda3ad3aa8af9620dc9672c2c33da409b0
   go-helpusersvote: |
     image_repo: helpusersvote/go-helpusersvote
-    image_tag: f0f577dda3ad3aa8af9620dc9672c2c33da409b0
   events-api: |
     image_repo: helpusersvote/events-api
-    image_tag: f0f577dda3ad3aa8af9620dc9672c2c33da409b0
