@@ -31,8 +31,10 @@ destroy:
 	cd terraform && terraform destroy -auto-approve
 
 check:
-	cd terraform && terraform init
-	cd terraform && terraform plan
+	cd terraform && \
+		terraform init && \
+		terraform plan && \
+		terraform apply -auto-approve -target=module.config.template_dir.kube_manifests
 
 setup-env: bin/kubectl bin/terraform
 

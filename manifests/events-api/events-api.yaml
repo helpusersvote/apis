@@ -17,10 +17,12 @@ spec:
     spec:
       containers:
         - name: ${_name}
-          image: ${image_repo}:${image_tag}
+          image: ${image_digest}
           env:
             - name: API_READ_KEY
               value: ${api_read_key}
+            - name: CLUSTER_ENV
+              value: ${environment}
           ports:
             - name: http
               containerPort: 3000
