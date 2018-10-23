@@ -1,5 +1,5 @@
 const errors = require('./errors')
-const { warn } = require('@usermirror/log')
+const { info, warn } = require('@usermirror/log')
 const Analytics = require('analytics-node')
 const Event = require('analytics-event')
 
@@ -16,10 +16,20 @@ const fakeAnalytics = {
 
 const analytics = writeKey ? new Analytics(writeKey) : fakeAnalytics
 
-function track(event) {
-  const e = SegmentEvent(event, { format: 'segment' })
+function track(inputEvent) {
+  const event = SegmentEvent(inputEvent, { format: 'segment' })
 
-  analytics.track(e)
+  if (event.timestamp) {
+    delete event.timestamp
+  }
+
+  if (!event.userId) {
+    // Attach `userId` so that the message doesn't get dropped
+    event.userId = 'huv-user-' + Math.floor(Math.random() * 100000000000)
+  }
+
+  info('analytics.track', { event: event.event })
+  analytics.track(event)
 }
 
 module.exports = {
