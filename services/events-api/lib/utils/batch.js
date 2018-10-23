@@ -1,6 +1,7 @@
 const { flatten, get, snakeCase } = require('lodash')
 const { track } = require('./analytics')
 const { incr } = require('./redis')
+const errors = require('./errors')
 
 module.exports = {
   processEventBatch
@@ -19,10 +20,11 @@ async function processEventBatch(batch, metadata) {
 }
 
 function sendToSegment(event) {
-  // Attach `userId` so that the message doesn't get dropped
-  event.userId = 'huv-user-' + Math.floor(Math.random() * 100000000000)
-
-  track(event)
+  try {
+    track(event)
+  } catch (err) {
+    errors.captureException(err)
+  }
 
   return Promise.resolve()
 }
