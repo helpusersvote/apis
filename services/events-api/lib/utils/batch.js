@@ -1,4 +1,5 @@
 const { flatten, get, snakeCase } = require('lodash')
+const { track } = require('./analytics')
 const { incr } = require('./redis')
 
 module.exports = {
@@ -7,8 +8,23 @@ module.exports = {
 
 async function processEventBatch(batch, metadata) {
   return await Promise.all(
-    flatten(batch.map(event => generateEventAggregates(event)))
+    flatten(
+      batch.map(event =>
+        Promise.all(
+          flatten([sendToSegment(event), generateEventAggregates(event)])
+        )
+      )
+    )
   )
+}
+
+function sendToSegment(event) {
+  // Attach `userId` so that the message doesn't get dropped
+  event.userId = 'huv-user'
+
+  track(event)
+
+  return Promise.resolve()
 }
 
 function generateEventAggregates(event) {
@@ -18,7 +34,7 @@ function generateEventAggregates(event) {
   const eventName = event.name || 'CTA Viewed'
 
   let age = get(event, 'props.age')
-  let region = get(event, 'props.region')
+  let region = get(event, 'props.region') || get(event, 'props.state')
   let campaignId = get(event, 'props.campaign')
 
   const logEvent = {
