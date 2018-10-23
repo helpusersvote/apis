@@ -20,7 +20,7 @@ async function processEventBatch(batch, metadata) {
 
 function sendToSegment(event) {
   // Attach `userId` so that the message doesn't get dropped
-  event.userId = 'huv-user'
+  event.userId = 'huv-user-' + Math.floor(Math.random() * 100000000000)
 
   track(event)
 
