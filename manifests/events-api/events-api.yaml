@@ -21,6 +21,10 @@ spec:
           env:
             - name: API_READ_KEY
               value: ${api_read_key}
+            - name: SEGMENT_WRITE_KEY
+              value: ${segment_write_key}
+            - name: SENTRY_DSN
+              value: ${sentry_dsn}
             - name: CLUSTER_ENV
               value: ${environment}
           ports:

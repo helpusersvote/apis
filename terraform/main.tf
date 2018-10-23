@@ -23,9 +23,12 @@ module "config" {
     domain     = "${var.domain}"
     tls_secret = "${var.tls_secret}"
 
-    api_read_key   = "${var.events_api_read_key}"
-    google_api_key = "${var.google_api_key}"
-    environment    = "${var.environment}"
+    api_read_key      = "${var.events_api_read_key}"
+    google_api_key    = "${var.google_api_key}"
+    segment_write_key = "${var.segment_write_key}"
+    sentry_dsn        = "${var.sentry_dsn}"
+
+    environment = "${var.environment}"
   }
 }
 
