@@ -6,10 +6,12 @@
     "test": "ava"
   },
   "dependencies": {
+    "@sentry/node": "^4.2.1",
     "@usermirror/log": "^0.1.12",
     "@usermirror/metrics": "^0.1.4",
-    "analytics-event": "^0.2.1",
+    "analytics-event": "^1.1.0",
     "analytics-id": "^0.1.0",
+    "analytics-node": "^3.3.0",
     "body-parser": "^1.18.3",
     "cors": "^2.8.4",
     "express": "^4.16.3",
